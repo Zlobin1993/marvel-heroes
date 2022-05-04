@@ -30,7 +30,16 @@ class RandomChar extends Component {
   }
 
   render() {
-    const { character: { name, description, thumbnail, linkHomepage, linkWiki } } = this.state;
+    const { character: { name, thumbnail, linkHomepage, linkWiki } } = this.state;
+    let { character: { description } } = this.state;
+
+    if (typeof description !== 'undefined') {
+      if (description.length === 0) {
+        description = 'Информация о персонаже отсутствует.'
+      } else if (description.length > 250) {
+        description = description.slice(0, 250) + '...';
+      }
+    }
 
     return (
       <div className="randomchar">
