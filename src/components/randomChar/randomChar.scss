@@ -6,6 +6,7 @@
     box-shadow: 5px 5px 20px rgba($black, 0.25);
 
     &__block {
+        position: relative;
         padding: 40px 35px;
         display: grid;
         grid-template-columns: 180px auto;
