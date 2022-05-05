@@ -11,7 +11,7 @@ const CharInfo = () => {
           <div className="char__info-name">thor</div>
 
           <div className="char__btns">
-            <a href="/" className="button button__main">Homepage</a>
+            <a href="/" className="button">Homepage</a>
             <a href="/" className="button button__secondary">Wiki</a>
           </div>
         </div>

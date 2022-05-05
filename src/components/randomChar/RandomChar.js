@@ -9,11 +9,6 @@ import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
 class RandomChar extends Component {
-  constructor(props) {
-    super(props);
-    this.updateCharacter();
-  }
-
   state = {
     character: {},
     isLoading: true,
@@ -21,6 +16,10 @@ class RandomChar extends Component {
   }
 
   marvelService = new MarvelService();
+
+  componentDidMount() {
+    this.updateCharacter();
+  }
 
   onCharacterLoaded = character => {
     this.setState({
@@ -39,6 +38,11 @@ class RandomChar extends Component {
   updateCharacter = () => {
     const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000); // TODO: Check min and max ids.
 
+    this.setState({
+      isLoading: true,
+      isError: false,
+    })
+
     this.marvelService
       .getCharacter(id)
       .then(this.onCharacterLoaded)
@@ -47,9 +51,9 @@ class RandomChar extends Component {
 
   render() {
     const { character, isLoading, isError } = this.state;
-    const errorMessage = isError ? <ErrorMessage message='Не удалось загрузить случайного персонажа.' /> : null;
-    const spinner = isLoading ? <Spinner /> : null;
-    const content = !(isLoading || isError) ? <View character={character} /> : null;
+    const errorMessage = isError && <ErrorMessage message='Failed to load random character.' />;
+    const spinner = isLoading && <Spinner />;
+    const content = !(isLoading || isError) && <View character={character} />;
 
     return (
       <div className="randomchar">
@@ -67,7 +71,12 @@ class RandomChar extends Component {
           </p>
 
           <p className="randomchar__title">Or choose another one</p>
-          <button className="button button__main">Try it</button>
+
+          <button className="button"
+            onClick={this.updateCharacter}>
+            Try it
+          </button>
+
           <img src={mjolnir} alt="mjolnir" className="randomchar__decoration" />
         </div>
       </div >
@@ -85,10 +94,10 @@ const View = ({ character }) => {
 
       <div className="randomchar__info">
         <p className="randomchar__name">{name}</p>
-        <p className="randomchar__descr">{description.length === 0 ? 'Информация о персонаже отсутствует.' : description.slice(0, 200) + '...'}</p>
+        <p className="randomchar__descr">{description.length === 0 ? 'Character information not found.' : description.slice(0, 200) + '...'}</p>
 
         <div className="randomchar__btns">
-          <a href={linkHomepage} className="button button__main">Homepage</a>
+          <a href={linkHomepage} className="button">Homepage</a>
           <a href={linkWiki} className="button button__secondary">Wiki</a>
         </div>
       </div>
