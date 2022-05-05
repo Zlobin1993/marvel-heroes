@@ -90,7 +90,7 @@ const RandomCharacterView = ({ character }) => {
 
   return (
     <>
-      <RandomCharacterThumbnail thumbnailSrc={thumbnail} />
+      <RandomCharacterThumbnail thumbnailSrc={thumbnail} thumbnailAlt={name} />
 
       <div className="random-character__info">
         <p className="random-character__name">{name}</p>
@@ -106,7 +106,7 @@ const RandomCharacterView = ({ character }) => {
 }
 
 // TODO: Divide to another file.
-const RandomCharacterThumbnail = ({ thumbnailSrc }) => {
+const RandomCharacterThumbnail = ({ thumbnailSrc, thumbnailAlt }) => {
   const isNoThumbnail = thumbnailSrc.indexOf('image_not_available.') > -1;
 
   if (isNoThumbnail) {
@@ -117,7 +117,9 @@ const RandomCharacterThumbnail = ({ thumbnailSrc }) => {
     );
   } else {
     return (
-      <img src={thumbnailSrc} alt="Random character" className="random-character__img" />
+      <img className="random-character__img"
+        src={thumbnailSrc}
+        alt={thumbnailAlt} />
     );
   }
 }

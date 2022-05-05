@@ -8,14 +8,19 @@ import decoration from '../../resources/img/vision.png';
 const App = () => {
     return (
         <div className="app">
-            <AppHeader/>
+            <AppHeader />
+
             <main>
-                <RandomChar/>
-                <div className="char__content">
-                    <CharList/>
-                    <CharInfo/>
+                <RandomChar />
+
+                <div className="character__content">
+                    <CharList />
+                    <CharInfo />
                 </div>
-                <img className="bg-decoration" src={decoration} alt="vision"/>
+
+                <img className="bg-decoration"
+                    src={decoration}
+                    alt="Vision" />
             </main>
         </div>
     )
