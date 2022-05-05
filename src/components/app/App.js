@@ -4,6 +4,7 @@ import AppHeader from "../appHeader/AppHeader";
 import RandomChar from "../randomChar/RandomChar";
 import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
+import ErrorBoundary from '../errorBoundary/ErrorBoundary';
 
 import decoration from '../../resources/img/vision.png';
 
@@ -24,11 +25,18 @@ class App extends Component {
         <AppHeader />
 
         <main>
-          <RandomChar />
+          <ErrorBoundary>
+            <RandomChar />
+          </ErrorBoundary>
 
           <div className="character__content">
-            <CharList onCharacterSelected={this.onCharacterSelected} />
-            <CharInfo characterId={this.state.selectedCharacterId} />
+            <ErrorBoundary>
+              <CharList onCharacterSelected={this.onCharacterSelected} />
+            </ErrorBoundary>
+
+            <ErrorBoundary>
+              <CharInfo characterId={this.state.selectedCharacterId} />
+            </ErrorBoundary>
           </div>
 
           <img className="bg-decoration"
