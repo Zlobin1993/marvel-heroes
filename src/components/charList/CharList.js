@@ -2,6 +2,7 @@ import { Component } from 'react';
 
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
+import CharacterListItem from '../characterListItem/CharacterListItem';
 
 import MarvelService from '../../services/MarvelService';
 
@@ -20,6 +21,13 @@ class CharList extends Component {
     this.loadCharacterList();
   }
 
+  onCharacterListLoading = () => {
+    this.setState({
+      isLoading: true,
+      isError: false,
+    })
+  }
+
   onCharacterListLoaded = characterList => {
     this.setState({
       characterList,
@@ -35,22 +43,21 @@ class CharList extends Component {
   }
 
   loadCharacterList = () => {
-    this.setState({
-      isLoading: true,
-      isError: false,
-    })
+    this.onCharacterListLoading();
 
     this.marvelService
       .getAllCharacters()
       .then(this.onCharacterListLoaded)
-      .catch(this.onError)
+      .catch(this.onError);
   }
 
   render() {
     const { characterList, isLoading, isError } = this.state;
+    const { onCharacterSelected } = this.props;
+
     const errorMessage = isError && <ErrorMessage message='Failed to load random character.' />;
     const spinner = isLoading && <Spinner />;
-    const content = !(isLoading || isError) && <CharacterListItem characterList={characterList} />;
+    const content = !(isLoading || isError) && <CharacterListItem characterList={characterList} onCharacterSelected={id => onCharacterSelected(id)} />;
 
     return (
       <div className="character__list">
@@ -58,52 +65,6 @@ class CharList extends Component {
         {errorMessage}
         {content}
       </div>
-    );
-  }
-}
-
-// TODO: Divide to another file.
-const CharacterListItem = ({ characterList }) => {
-  if (characterList.length === 0) return;
-
-  console.log(characterList);
-
-  const characterListItems = characterList.map(({ id, name, thumbnail }) => {
-    return (
-      <li className="character__item"
-        key={id}>
-        <CharacterThumbnail thumbnailSrc={thumbnail} thumbnailAlt={name} />
-        <div className="character__name">{name}</div>
-      </li>
-    )
-  })
-
-  return (
-    <>
-      <ul className="character__grid">
-        {characterListItems}
-      </ul>
-
-      <button className="button button__long">Load More</button>
-    </>
-  );
-}
-
-// TODO: Divide to another file.
-const CharacterThumbnail = ({ thumbnailSrc, thumbnailAlt }) => {
-  const isNoThumbnail = thumbnailSrc.indexOf('image_not_available.') > -1;
-
-  if (isNoThumbnail) {
-    return (
-      <div className='character__image character__image--no-image'>
-        <ErrorMessage message="Image not found." />
-      </div>
-    );
-  } else {
-    return (
-      <img className='character__image'
-        src={thumbnailSrc}
-        alt={thumbnailAlt} />
     );
   }
 }

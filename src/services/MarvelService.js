@@ -32,6 +32,7 @@ class MarvelService {
       thumbnail: character.thumbnail.path + '.' + character.thumbnail.extension,
       linkHomepage: character.urls[0].url, // TODO: Use url bt urlType field.
       linkWiki: character.urls[1].url, // TODO: Use url bt urlType field.
+      comicsList: character.comics.items,
     };
   }
 }

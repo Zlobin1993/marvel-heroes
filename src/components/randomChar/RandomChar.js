@@ -21,6 +21,13 @@ class RandomChar extends Component {
     this.updateCharacter();
   }
 
+  onCharacterLoading = () => {
+    this.setState({
+      isLoading: true,
+      isError: false,
+    })
+  }
+
   onCharacterLoaded = character => {
     this.setState({
       character,
@@ -38,19 +45,17 @@ class RandomChar extends Component {
   updateCharacter = () => {
     const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000); // TODO: Check min and max ids.
 
-    this.setState({
-      isLoading: true,
-      isError: false,
-    })
+    this.onCharacterLoading();
 
     this.marvelService
       .getCharacter(id)
       .then(this.onCharacterLoaded)
-      .catch(this.onError)
+      .catch(this.onError);
   }
 
   render() {
     const { character, isLoading, isError } = this.state;
+
     const errorMessage = isError && <ErrorMessage message='Failed to load random character.' />;
     const spinner = isLoading && <Spinner />;
     const content = !(isLoading || isError) && <RandomCharacterView character={character} />;
@@ -97,8 +102,15 @@ const RandomCharacterView = ({ character }) => {
         <p className="random-character__descr">{description.length === 0 ? 'Character information not found.' : description.slice(0, 200) + '...'}</p>
 
         <div className="random-character__btns">
-          <a href={linkHomepage} className="button">Homepage</a>
-          <a href={linkWiki} className="button button__secondary">Wiki</a>
+          <a className="button"
+            href={linkHomepage}
+            target="_blank"
+            rel="noreferrer">Homepage</a>
+
+          <a className="button button__secondary"
+            href={linkWiki}
+            target="_blank"
+            rel="noreferrer">Wiki</a>
         </div>
       </div>
     </>
