@@ -53,31 +53,31 @@ class RandomChar extends Component {
     const { character, isLoading, isError } = this.state;
     const errorMessage = isError && <ErrorMessage message='Failed to load random character.' />;
     const spinner = isLoading && <Spinner />;
-    const content = !(isLoading || isError) && <View character={character} />;
+    const content = !(isLoading || isError) && <RandomCharacterView character={character} />;
 
     return (
-      <div className="randomchar">
-        <div className="randomchar__block">
+      <div className="random-character">
+        <div className="random-character__block">
           {spinner}
           {errorMessage}
           {content}
         </div>
 
-        <div className="randomchar__static">
-          <p className="randomchar__title">
+        <div className="random-character__static">
+          <p className="random-character__title">
             Random character for today!
             <br />
             Do you want to get to know him better?
           </p>
 
-          <p className="randomchar__title">Or choose another one</p>
+          <p className="random-character__title">Or choose another one</p>
 
           <button className="button"
             onClick={this.updateCharacter}>
             Try it
           </button>
 
-          <img src={mjolnir} alt="mjolnir" className="randomchar__decoration" />
+          <img src={mjolnir} alt="mjolnir" className="random-character__decoration" />
         </div>
       </div >
     );
@@ -85,24 +85,41 @@ class RandomChar extends Component {
 }
 
 // TODO: Divide to another file.
-const View = ({ character }) => {
+const RandomCharacterView = ({ character }) => {
   const { name, description, thumbnail, linkHomepage, linkWiki } = character;
 
   return (
     <>
-      <img src={thumbnail} alt="Random character" className="randomchar__img" />
+      <RandomCharacterThumbnail thumbnailSrc={thumbnail} />
 
-      <div className="randomchar__info">
-        <p className="randomchar__name">{name}</p>
-        <p className="randomchar__descr">{description.length === 0 ? 'Character information not found.' : description.slice(0, 200) + '...'}</p>
+      <div className="random-character__info">
+        <p className="random-character__name">{name}</p>
+        <p className="random-character__descr">{description.length === 0 ? 'Character information not found.' : description.slice(0, 200) + '...'}</p>
 
-        <div className="randomchar__btns">
+        <div className="random-character__btns">
           <a href={linkHomepage} className="button">Homepage</a>
           <a href={linkWiki} className="button button__secondary">Wiki</a>
         </div>
       </div>
     </>
   )
+}
+
+// TODO: Divide to another file.
+const RandomCharacterThumbnail = ({ thumbnailSrc }) => {
+  const isNoThumbnail = thumbnailSrc.indexOf('image_not_available.') > -1;
+
+  if (isNoThumbnail) {
+    return (
+      <div className='random-character__img random-character__img--no-image'>
+        <ErrorMessage message="Image not found." />
+      </div>
+    );
+  } else {
+    return (
+      <img src={thumbnailSrc} alt="Random character" className="random-character__img" />
+    );
+  }
 }
 
 export default RandomChar;

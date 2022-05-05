@@ -1,22 +1,41 @@
 @import "../../style/variables.scss";
 
-.randomchar {
+.random-character {
     display: grid;
-    grid-template-columns: repeat(2, 50%);
+    grid-template-columns: repeat(2, 1fr);
+    min-height: 260px;
     box-shadow: 5px 5px 20px rgba($black, 0.25);
 
     &__block {
         position: relative;
-        padding: 40px 35px;
         display: grid;
         grid-template-columns: 180px auto;
         column-gap: 30px;
+        padding: 40px 35px;
+    }
+
+    &__static {
+        position: relative;
+        padding: 40px 35px;
+        background-color: $dark;
+
+        button {
+            margin-top: 13px;
+        }
     }
 
     &__img {
+        position: relative;
         width: 180px;
         height: 180px;
         object-fit: cover;
+        background-color: $grey;
+
+        &--no-image {
+            box-sizing: border-box;
+            background: none;
+            border: 2px dashed $main;
+        }
     }
 
     &__info {
@@ -41,16 +60,6 @@
     &__btns {
         a:nth-child(1) {
             margin-right: 30px;
-        }
-    }
-
-    &__static {
-        padding: 40px 35px;
-        background-color: $dark;
-        position: relative;
-
-        button {
-            margin-top: 13px;
         }
     }
 
