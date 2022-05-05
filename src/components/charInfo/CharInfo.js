@@ -86,7 +86,7 @@ const CharacterView = ({ character }) => {
   return (
     <>
       <div className="character__basics">
-        <img src={thumbnail} alt={name} />
+        <CharacterThumbnail thumbnailSrc={thumbnail} thumbnailAlt={name} />
 
         <div>
           <div className="character__info-name">{name}</div>
@@ -106,22 +106,54 @@ const CharacterView = ({ character }) => {
       </div>
 
       <div className="character__descr">{description}</div>
-
-      <h3 className="character__comics">Comics:</h3>
-
-      {/* TODO: Divide to another file. */}
-      <ul className="character__comics-list">
-        {comicsList.map((comicsItem, index) => {
-          return (
-            <li className="character__comics-item"
-              key={index}>
-              {comicsItem.name}
-            </li>
-          )
-        })}
-      </ul>
+      <ComicsList comicsList={comicsList} />
     </>
   );
+}
+
+// TODO: Divide to another file.
+const CharacterThumbnail = ({ thumbnailSrc, thumbnailAlt }) => {
+  const isNoThumbnail = thumbnailSrc.indexOf('image_not_available.') > -1;
+
+  if (isNoThumbnail) {
+    return (
+      <div className='character__image character__image--small character__image--no-image'>
+        <ErrorMessage message="Image not found." />
+      </div>
+    );
+  } else {
+    return (
+      <img className='character__image character__image--small'
+        src={thumbnailSrc}
+        alt={thumbnailAlt} />
+    );
+  }
+}
+
+// TODO: Divide to another file.
+const ComicsList = ({ comicsList }) => {
+  if (comicsList.length > 0) {
+    return (
+      <>
+        <h3 className="character__comics">Comics:</h3>
+
+        <ul className="character__comics-list">
+          {comicsList.map((comicsItem, index) => {
+            return (
+              <li className="character__comics-item"
+                key={index}>
+                {comicsItem.name}
+              </li>
+            )
+          })}
+        </ul>
+      </>
+    );
+  } else {
+    return (
+      <h3 className="character__comics">There is no comics with this character.</h3>
+    );
+  }
 }
 
 export default CharInfo;
