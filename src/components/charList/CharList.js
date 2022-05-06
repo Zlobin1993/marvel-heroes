@@ -59,37 +59,30 @@ class CharList extends Component {
     })
   }
 
-  renderCharacters(characterList) {
-    if (characterList.length === 0) return;
-
+  render() {
+    const { characterList, isLoading, isError } = this.state;
     const { onCharacterSelected } = this.props;
 
-    const characterListItems = characterList.map(({ id, name, thumbnail }) => {
-      return (
-        <li className="character__item"
-          key={id}
-          onClick={() => onCharacterSelected(id)}>
-          <CharacterThumbnail thumbnailSrc={thumbnail} thumbnailAlt={name} />
-          <div className="character__name">{name}</div>
-        </li>
-      )
-    })
-
-    return (
+    const renderedCharacterList = characterList.length === 0 ? null : (
       <>
         <ul className="character__grid">
-          {characterListItems}
+          {
+            characterList.map(({ id, name, thumbnail }) => {
+              return (
+                <li className="character__item"
+                  key={id}
+                  onClick={() => onCharacterSelected(id)}>
+                  <CharacterThumbnail thumbnailSrc={thumbnail} thumbnailAlt={name} />
+                  <p className="character__name">{name}</p>
+                </li>
+              )
+            })
+          }
         </ul>
 
         <button className="button button__long">Load More</button>
       </>
     );
-  }
-
-  render() {
-    const { characterList, isLoading, isError } = this.state;
-
-    const renderedCharacterList = this.renderCharacters(characterList);
 
     const errorMessage = isError && <ErrorMessage message='Failed to load random character.' />;
     const spinner = isLoading && <Spinner />;
