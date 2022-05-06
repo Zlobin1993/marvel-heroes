@@ -13,7 +13,8 @@ class CharList extends Component {
     isLoading: true,
     isError: false,
     isAdditionalCharactersLoading: false,
-    additionalCharacherOffset: 1600,
+    additionalCharacherOffset: 0,
+    additionalCharacherOffsetStep: 9,
     isCharacterListEnded: false,
   }
 
@@ -24,12 +25,12 @@ class CharList extends Component {
   }
 
   onCharacterListLoaded = additionalCharacterList => {
-    this.setState(({ characterList, additionalCharacherOffset, isCharacterListEnded }) => ({
+    this.setState(({ characterList, additionalCharacherOffset, additionalCharacherOffsetStep }) => ({
       characterList: [...characterList, ...additionalCharacterList],
       isLoading: false,
       isAdditionalCharactersLoading: false,
-      additionalCharacherOffset: additionalCharacherOffset + 9,
-      isCharacterListEnded: additionalCharacterList.length < 9 ? true : false,
+      additionalCharacherOffset: additionalCharacherOffset + additionalCharacherOffsetStep,
+      isCharacterListEnded: additionalCharacterList.length < additionalCharacherOffsetStep ? true : false,
     }));
   }
 
