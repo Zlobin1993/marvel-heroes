@@ -13,27 +13,23 @@ class CharList extends Component {
     isLoading: true,
     isError: false,
     isAdditionalCharactersLoading: false,
+    additionalCharacherOffset: 1600,
+    isCharacterListEnded: false,
   }
 
   marvelService = new MarvelService();
 
   componentDidMount() {
-    this.onCharacterListLoading();
     this.onRequest();
   }
 
-  onCharacterListLoading = () => {
-    this.setState({
-      isLoading: true,
-      isError: false,
-    })
-  }
-
   onCharacterListLoaded = additionalCharacterList => {
-    this.setState(({ characterList }) => ({
+    this.setState(({ characterList, additionalCharacherOffset, isCharacterListEnded }) => ({
       characterList: [...characterList, ...additionalCharacterList],
       isLoading: false,
       isAdditionalCharactersLoading: false,
+      additionalCharacherOffset: additionalCharacherOffset + 9,
+      isCharacterListEnded: additionalCharacterList.length < 9 ? true : false,
     }));
   }
 
@@ -44,11 +40,11 @@ class CharList extends Component {
     });
   }
 
-  onRequest = offset => {
+  onRequest = additionalCharacherOffset => {
     this.onAdditionalCharactersLoading();
 
     this.marvelService
-      .getAllCharacters(offset)
+      .getAllCharacters(additionalCharacherOffset)
       .then(this.onCharacterListLoaded)
       .catch(this.onError);
   }
@@ -60,7 +56,7 @@ class CharList extends Component {
   }
 
   render() {
-    const { characterList, isLoading, isError } = this.state;
+    const { characterList, isLoading, isError, isAdditionalCharactersLoading, additionalCharacherOffset, isCharacterListEnded } = this.state;
     const { onCharacterSelected } = this.props;
 
     const renderedCharacterList = characterList.length === 0 ? null : (
@@ -80,12 +76,21 @@ class CharList extends Component {
           }
         </ul>
 
-        <button className="button button__long">Load More</button>
+        {
+          !isCharacterListEnded && (
+            <button className="button button__long"
+              disabled={isAdditionalCharactersLoading}
+              onClick={() => this.onRequest(additionalCharacherOffset)}
+            >
+              {isAdditionalCharactersLoading ? <Spinner type='white' size='small' /> : 'Load More'}
+            </button>
+          )
+        }
       </>
     );
 
-    const errorMessage = isError && <ErrorMessage message='Failed to load random character.' />;
     const spinner = isLoading && <Spinner />;
+    const errorMessage = isError && <ErrorMessage message='Failed to load random character.' />;
     const content = !(isLoading || isError) && renderedCharacterList;
 
     return (
