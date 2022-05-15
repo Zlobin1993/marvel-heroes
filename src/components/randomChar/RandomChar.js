@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -8,85 +8,75 @@ import MarvelService from '../../services/MarvelService';
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
-class RandomChar extends Component {
-  state = {
-    character: {},
-    isLoading: true,
-    isError: false,
+const RandomChar = props => {
+  const [character, setCharacter] = useState({}),
+    [isLoading, setIsLoading] = useState(true),
+    [isError, setIsError] = useState(false);
+
+  const marvelService = new MarvelService();
+
+  useEffect(() => {
+    updateCharacter();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const onCharacterLoading = () => {
+    setIsLoading(true);
+    setIsError(false);
   }
 
-  marvelService = new MarvelService();
-
-  componentDidMount() {
-    this.updateCharacter();
+  const onCharacterLoaded = character => {
+    setCharacter(character);
+    setIsLoading(false);
   }
 
-  onCharacterLoading = () => {
-    this.setState({
-      isLoading: true,
-      isError: false,
-    })
+  const onError = () => {
+    setIsLoading(false);
+    setIsError(true);
   }
 
-  onCharacterLoaded = character => {
-    this.setState({
-      character,
-      isLoading: false,
-    });
-  }
-
-  onError = () => {
-    this.setState({
-      isLoading: false,
-      isError: true,
-    });
-  }
-
-  updateCharacter = () => {
+  const updateCharacter = () => {
     const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000); // TODO: Check min and max ids.
 
-    this.onCharacterLoading();
+    onCharacterLoading();
 
-    this.marvelService
+    marvelService
       .getCharacter(id)
-      .then(this.onCharacterLoaded)
-      .catch(this.onError);
+      .then(onCharacterLoaded)
+      .catch(onError);
   }
 
-  render() {
-    const { character, isLoading, isError } = this.state;
+  const errorMessage = isError && <ErrorMessage message='Failed to load random character.' />;
+  const spinner = isLoading && <Spinner />;
+  const content = !(isLoading || isError) && <RandomCharacterView character={character} />;
 
-    const errorMessage = isError && <ErrorMessage message='Failed to load random character.' />;
-    const spinner = isLoading && <Spinner />;
-    const content = !(isLoading || isError) && <RandomCharacterView character={character} />;
+  return (
+    <div className="random-character">
+      <div className="random-character__block">
+        {spinner}
+        {errorMessage}
+        {content}
+      </div>
 
-    return (
-      <div className="random-character">
-        <div className="random-character__block">
-          {spinner}
-          {errorMessage}
-          {content}
-        </div>
+      <div className="random-character__static">
+        <p className="random-character__title">
+          Random character for today!
+          <br />
+          Do you want to get to know him better?
+        </p>
 
-        <div className="random-character__static">
-          <p className="random-character__title">
-            Random character for today!
-            <br />
-            Do you want to get to know him better?
-          </p>
+        <p className="random-character__title">Or choose another one</p>
 
-          <p className="random-character__title">Or choose another one</p>
+        <button className="button"
+          onClick={updateCharacter}>
+          Try it
+        </button>
 
-          <button className="button"
-            onClick={this.updateCharacter}>
-            Try it
-          </button>
-
-          <img src={mjolnir} alt="mjolnir" className="random-character__decoration" />
-        </div>
-      </div >
-    );
-  }
+        <img src={mjolnir} alt="mjolnir" className="random-character__decoration" />
+      </div>
+    </div >
+  );
 }
 
 // TODO: Divide to another file.
