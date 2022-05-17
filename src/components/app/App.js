@@ -1,19 +1,20 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 
 import AppHeader from "../appHeader/AppHeader";
 import RandomChar from "../randomChar/RandomChar";
-import CharList from "../charList/CharList";
-import CharInfo from "../charInfo/CharInfo";
+// import CharList from "../charList/CharList";
+// import CharInfo from "../charInfo/CharInfo";
+import ComicsList from '../comicsList/ComicsList';
 import ErrorBoundary from '../errorBoundary/ErrorBoundary';
 
 import decoration from '../../resources/img/vision.png';
 
 const App = () => {
-  const [selectedCharacterId, setSelectedCharacterId] = useState(null);
+  // const [selectedCharacterId, setSelectedCharacterId] = useState(null);
 
-  const onCharacterSelected = id => {
-    setSelectedCharacterId(id);
-  }
+  // const onCharacterSelected = id => {
+  //   setSelectedCharacterId(id);
+  // }
 
   return (
     <div className="app">
@@ -24,7 +25,7 @@ const App = () => {
           <RandomChar />
         </ErrorBoundary>
 
-        <div className="character__content">
+        {/* <div className="character__content">
           <ErrorBoundary>
             <CharList onCharacterSelected={onCharacterSelected} />
           </ErrorBoundary>
@@ -32,7 +33,11 @@ const App = () => {
           <ErrorBoundary>
             <CharInfo characterId={selectedCharacterId} />
           </ErrorBoundary>
-        </div>
+        </div> */}
+
+        <ErrorBoundary>
+          <ComicsList />
+        </ErrorBoundary>
 
         <img className="bg-decoration"
           src={decoration}
