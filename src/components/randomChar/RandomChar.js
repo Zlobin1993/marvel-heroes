@@ -3,17 +3,14 @@ import { useState, useEffect } from 'react';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
-const RandomChar = props => {
-  const [character, setCharacter] = useState({}),
-    [isLoading, setIsLoading] = useState(true),
-    [isError, setIsError] = useState(false);
-
-  const marvelService = new MarvelService();
+const RandomChar = () => {
+  const { isLoading, error, clearError, getCharacter } = useMarvelService();
+  const [character, setCharacter] = useState({});
 
   useEffect(() => {
     updateCharacter();
@@ -21,35 +18,22 @@ const RandomChar = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const onCharacterLoading = () => {
-    setIsLoading(true);
-    setIsError(false);
-  }
-
   const onCharacterLoaded = character => {
     setCharacter(character);
-    setIsLoading(false);
-  }
-
-  const onError = () => {
-    setIsLoading(false);
-    setIsError(true);
   }
 
   const updateCharacter = () => {
+    clearError();
+
     const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000); // TODO: Check min and max ids.
 
-    onCharacterLoading();
-
-    marvelService
-      .getCharacter(id)
+    getCharacter(id)
       .then(onCharacterLoaded)
-      .catch(onError);
   }
 
-  const errorMessage = isError && <ErrorMessage message='Failed to load random character.' />;
+  const errorMessage = error && <ErrorMessage message='Failed to load random character.' />;
   const spinner = isLoading && <Spinner />;
-  const content = !(isLoading || isError) && <RandomCharacterView character={character} />;
+  const content = !(isLoading || error) && <RandomCharacterView character={character} />;
 
   return (
     <div className="random-character">
@@ -89,7 +73,7 @@ const RandomCharacterView = ({ character }) => {
 
       <div className="random-character__info">
         <p className="random-character__name">{name}</p>
-        <p className="random-character__descr">{description.length === 0 ? 'Character information not found.' : description.slice(0, 200) + '...'}</p>
+        <p className="random-character__descr">{description ? description.length > 200 ? (description.slice(0, 200) + '...') : description : 'Character information not found.'}</p>
 
         <div className="random-character__btns">
           <a className="button"
@@ -109,21 +93,14 @@ const RandomCharacterView = ({ character }) => {
 
 // TODO: Divide to another file.
 const RandomCharacterThumbnail = ({ thumbnailSrc, thumbnailAlt }) => {
-  const isNoThumbnail = thumbnailSrc.indexOf('image_not_available.') > -1;
-
-  if (isNoThumbnail) {
-    return (
-      <div className='random-character__img random-character__img--no-image'>
-        <ErrorMessage message="Image not found." />
-      </div>
-    );
-  } else {
-    return (
-      <img className="random-character__img"
-        src={thumbnailSrc}
-        alt={thumbnailAlt} />
-    );
-  }
+  return thumbnailSrc
+    ? <img className="random-character__img"
+      src={thumbnailSrc}
+      alt={thumbnailAlt}
+    />
+    : <div className='random-character__img random-character__img--no-image'>
+      <ErrorMessage message="Image not found." />
+    </div>;
 }
 
 export default RandomChar;

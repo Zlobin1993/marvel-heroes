@@ -3,53 +3,38 @@ import { useState, useEffect, useRef } from 'react';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 import './charList.scss';
 
 const CharList = ({ onCharacterSelected }) => {
   const _additionalCharacterOffsetStep = 9;
+  const { isLoading, error, getAllCharacters } = useMarvelService();
 
   const [characterList, setCharacterList] = useState([]),
-    [isLoading, setIsLoading] = useState(true),
-    [isError, setIsError] = useState(false),
     [isAdditionalCharactersLoading, setIsAdditionalCharactersLoading] = useState(false),
     [additionalCharacterOffset, setAdditionalCharacterOffset] = useState(0),
     [isCharacterListEnded, setIsCharacterListEnded] = useState(false);
 
-  const marvelService = new MarvelService();
-
   useEffect(() => {
-    onRequest();
+    onRequest(additionalCharacterOffset, true);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onCharacterListLoaded = (additionalCharacterList) => {
     setCharacterList(characterList => [...characterList, ...additionalCharacterList]);
-    setIsLoading(false);
     setIsAdditionalCharactersLoading(false);
     setAdditionalCharacterOffset(additionalCharacterOffset => additionalCharacterOffset + _additionalCharacterOffsetStep);
     setIsCharacterListEnded(additionalCharacterList.length < _additionalCharacterOffsetStep ? true : false);
   }
 
-  const onError = () => {
-    setIsLoading(false);
-    setIsError(true);
-  }
+  const onRequest = (additionalCharacterOffset, isInitialRequest = false) => {
+    setIsAdditionalCharactersLoading(!isInitialRequest);
 
-  const onRequest = additionalCharacterOffset => {
-    onAdditionalCharactersLoading();
-
-    marvelService
-      .getAllCharacters(additionalCharacterOffset, _additionalCharacterOffsetStep)
+    getAllCharacters(additionalCharacterOffset, _additionalCharacterOffsetStep)
       .then(onCharacterListLoaded)
-      .catch(onError);
   };
-
-  const onAdditionalCharactersLoading = () => {
-    setIsAdditionalCharactersLoading(true);
-  }
 
   const itemRefs = useRef([]);
 
@@ -85,7 +70,7 @@ const CharList = ({ onCharacterSelected }) => {
         !isCharacterListEnded && (
           <button className="button button__long"
             disabled={isAdditionalCharactersLoading}
-            onClick={() => onRequest(additionalCharacterOffset)}
+            onClick={() => onRequest(additionalCharacterOffset, false)}
           >
             {isAdditionalCharactersLoading ? <Spinner type='white' size='small' /> : 'Load More'}
           </button>
@@ -94,36 +79,27 @@ const CharList = ({ onCharacterSelected }) => {
     </>
   );
 
-  const spinner = isLoading && <Spinner />;
-  const errorMessage = isError && <ErrorMessage message='Failed to load random character.' />;
-  const content = !(isLoading || isError) && renderedCharacterList;
+  const spinner = (isLoading && !isAdditionalCharactersLoading) && <Spinner />,
+    errorMessage = error && <ErrorMessage message='Failed to load characters list.' />;
 
   return (
     <div className="character__list">
       {spinner}
       {errorMessage}
-      {content}
+      {renderedCharacterList}
     </div>
   );
 }
 
 // TODO: Divide to another file.
 const CharacterThumbnail = ({ thumbnailSrc, thumbnailAlt }) => {
-  const isNoThumbnail = thumbnailSrc.indexOf('image_not_available.') > -1;
-
-  if (isNoThumbnail) {
-    return (
-      <div className='character__image character__image--no-image'>
-        <ErrorMessage message="Image not found." />
-      </div>
-    );
-  } else {
-    return (
-      <img className='character__image'
-        src={thumbnailSrc}
-        alt={thumbnailAlt} />
-    );
-  }
+  return thumbnailSrc
+    ? <img className='character__image'
+      src={thumbnailSrc}
+      alt={thumbnailAlt} />
+    : <div className='character__image character__image--no-image'>
+      <ErrorMessage message="Image not found." />
+    </div>;
 }
 
 export default CharList;

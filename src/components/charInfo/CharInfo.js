@@ -4,16 +4,13 @@ import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
 
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 import './charInfo.scss';
 
 const CharInfo = ({ characterId }) => {
-  const [character, setCharacter] = useState(null),
-    [isLoading, setIsLoading] = useState(false),
-    [isError, setIsError] = useState(false);
-
-  const marvelService = new MarvelService();
+  const { isLoading, error, clearError, getCharacter } = useMarvelService();
+  const [character, setCharacter] = useState(null);
 
   useEffect(() => {
     updateCharacter();
@@ -21,36 +18,23 @@ const CharInfo = ({ characterId }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [characterId])
 
-  const onCharacterLoading = () => {
-    setIsLoading(true);
-    setIsError(false);
-  }
-
   const onCharacterLoaded = character => {
     setCharacter(character);
-    setIsLoading(false);
-  }
-
-  const onError = () => {
-    setIsLoading(false);
-    setIsError(true);
   }
 
   const updateCharacter = () => {
     if (!characterId) return;
 
-    onCharacterLoading();
+    clearError();
 
-    marvelService
-      .getCharacter(characterId)
+    getCharacter(characterId)
       .then(onCharacterLoaded)
-      .catch(onError);
   }
 
-  const skeleton = !(character || isLoading || isError) && <Skeleton />;
-  const errorMessage = isError && <ErrorMessage message='Failed to load character info.' />;
-  const spinner = isLoading && <Spinner />;
-  const content = (!(isLoading || isError) && character) && <CharacterView character={character} />;
+  const skeleton = !(character || isLoading || error) && <Skeleton />,
+    errorMessage = error && <ErrorMessage message='Failed to load character info.' />,
+    spinner = isLoading && <Spinner />,
+    content = (!(isLoading || error) && character) && <CharacterView character={character} />;
 
   return (
     <div className="character__info">
@@ -95,21 +79,13 @@ const CharacterView = ({ character }) => {
 
 // TODO: Divide to another file.
 const CharacterThumbnail = ({ thumbnailSrc, thumbnailAlt }) => {
-  const isNoThumbnail = thumbnailSrc.indexOf('image_not_available.') > -1;
-
-  if (isNoThumbnail) {
-    return (
-      <div className='character__image character__image--small character__image--no-image'>
-        <ErrorMessage message="Image not found." />
-      </div>
-    );
-  } else {
-    return (
-      <img className='character__image character__image--small'
-        src={thumbnailSrc}
-        alt={thumbnailAlt} />
-    );
-  }
+  return thumbnailSrc
+    ? <img className='character__image character__image--small'
+      src={thumbnailSrc}
+      alt={thumbnailAlt} />
+    : <div className='character__image character__image--small character__image--no-image'>
+      <ErrorMessage message="Image not found." />
+    </div>;
 }
 
 // TODO: Divide to another file.
