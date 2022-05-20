@@ -1,83 +1,49 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
 
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 import './charInfo.scss';
 
-class CharInfo extends Component {
-  state = {
-    character: null,
-    isLoading: false,
-    isError: false,
+const CharInfo = ({ characterId }) => {
+  const { isLoading, error, clearError, getCharacter } = useMarvelService();
+  const [character, setCharacter] = useState(null);
+
+  useEffect(() => {
+    updateCharacter();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [characterId])
+
+  const onCharacterLoaded = character => {
+    setCharacter(character);
   }
 
-  marvelService = new MarvelService();
-
-  componentDidMount() {
-    this.updateCharacter();
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.characterId !== prevProps.characterId) {
-      this.updateCharacter();
-    }
-  }
-
-  onCharacterLoading = () => {
-    this.setState({
-      isLoading: true,
-      isError: false,
-    })
-  }
-
-  onCharacterLoaded = character => {
-    this.setState({
-      character,
-      isLoading: false,
-    });
-  }
-
-  onError = () => {
-    this.setState({
-      isLoading: false,
-      isError: true,
-    });
-  }
-
-  updateCharacter = () => {
-    const { characterId } = this.props;
-
+  const updateCharacter = () => {
     if (!characterId) return;
 
-    this.onCharacterLoading();
+    clearError();
 
-    this.marvelService
-      .getCharacter(characterId)
-      .then(this.onCharacterLoaded)
-      .catch(this.onError);
+    getCharacter(characterId)
+      .then(onCharacterLoaded)
   }
 
-  render() {
-    const { character, isLoading, isError } = this.state;
+  const skeleton = !(character || isLoading || error) && <Skeleton />,
+    errorMessage = error && <ErrorMessage message='Failed to load character info.' />,
+    spinner = isLoading && <Spinner />,
+    content = (!(isLoading || error) && character) && <CharacterView character={character} />;
 
-    const skeleton = !(character || isLoading || isError) && <Skeleton />;
-    const errorMessage = isError && <ErrorMessage message='Failed to load character info.' />;
-    const spinner = isLoading && <Spinner />;
-    const content = (!(isLoading || isError) && character) && <CharacterView character={character} />;
-
-    return (
-      <div className="character__info">
-        {skeleton}
-        {spinner}
-        {errorMessage}
-        {content}
-      </div>
-    );
-  }
+  return (
+    <div className="character__info">
+      {skeleton}
+      {spinner}
+      {errorMessage}
+      {content}
+    </div>
+  );
 }
 
 const CharacterView = ({ character }) => {
@@ -113,21 +79,13 @@ const CharacterView = ({ character }) => {
 
 // TODO: Divide to another file.
 const CharacterThumbnail = ({ thumbnailSrc, thumbnailAlt }) => {
-  const isNoThumbnail = thumbnailSrc.indexOf('image_not_available.') > -1;
-
-  if (isNoThumbnail) {
-    return (
-      <div className='character__image character__image--small character__image--no-image'>
-        <ErrorMessage message="Image not found." />
-      </div>
-    );
-  } else {
-    return (
-      <img className='character__image character__image--small'
-        src={thumbnailSrc}
-        alt={thumbnailAlt} />
-    );
-  }
+  return thumbnailSrc
+    ? <img className='character__image character__image--small'
+      src={thumbnailSrc}
+      alt={thumbnailAlt} />
+    : <div className='character__image character__image--small character__image--no-image'>
+      <ErrorMessage message="Image not found." />
+    </div>;
 }
 
 // TODO: Divide to another file.

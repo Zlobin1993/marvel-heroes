@@ -1,9 +1,12 @@
 @import "./variables";
 
 .button {
+    position: relative;
     min-width: 100px;
+    min-height: 40px;
     padding: 10px 15px;
     font-size: 14px;
+    line-height: 20px;
     color: $white;
     text-align: center;
     text-transform: uppercase;
@@ -14,7 +17,7 @@
 
     &__long {
         display: block;
-        width: 170px;
+        min-width: 170px;
         margin: 45px auto 0 auto;
     }
 
@@ -24,5 +27,10 @@
 
     &:hover {
         opacity: 0.8;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
     }
 }
