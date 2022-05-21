@@ -53,39 +53,39 @@ const useMarvelService = () => {
     return response.data.results.map(_transformComicsData);
   }
 
-  const getComics = async id => {
+  const getComic = async id => {
     const response = await request(`${_apiBase}comics/${id}?${_apiKey}`);
     return _transformComicsData(response.data.results[0]);
   }
 
-  const _transformComicsData = comics => {
+  const _transformComicsData = comic => {
     let thumbnail = null,
       price = null;
 
-    if (comics.thumbnail.path && comics.thumbnail.extension) {
-      if (typeof comics.thumbnail.path === 'string') {
-        if (comics.thumbnail.path.indexOf('image_not_available') === -1) {
-          thumbnail = comics.thumbnail.path + '.' + comics.thumbnail.extension;
+    if (comic.thumbnail.path && comic.thumbnail.extension) {
+      if (typeof comic.thumbnail.path === 'string') {
+        if (comic.thumbnail.path.indexOf('image_not_available') === -1) {
+          thumbnail = comic.thumbnail.path + '.' + comic.thumbnail.extension;
         }
       }
     }
 
-    if (comics.prices) {
-      if (!isNaN(+comics.prices[0].price) && +comics.prices[0].price !== 0) {
-        price = comics.prices[0].price;
+    if (comic.prices) {
+      if (!isNaN(+comic.prices[0].price) && +comic.prices[0].price !== 0) {
+        price = comic.prices[0].price;
       }
     }
 
     return {
-      id: comics.id,
-      title: comics.title,
-      description: comics.description || null,
+      id: comic.id,
+      title: comic.title,
+      description: comic.description || null,
       thumbnail,
       price,
     };
   }
 
-  return { isLoading, error, clearError, getCharacter, getAllCharacters, getComics, getAllComics };
+  return { isLoading, error, clearError, getCharacter, getAllCharacters, getComic, getAllComics };
 }
 
 export default useMarvelService;
