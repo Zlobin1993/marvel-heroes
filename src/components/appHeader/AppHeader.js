@@ -14,13 +14,18 @@ const AppHeader = () => {
       <nav className="menu">
         <ul className="menu__list">
           <li className="menu__item">
-            <NavLink exact to="/" className="menu__link" activeClassName="menu__link--active">Characters</NavLink>
+            <NavLink
+              to="/"
+              end
+              className={({ isActive }) => ("menu__link" + (isActive ? " menu__link--active" : ''))}>Characters</NavLink>
           </li>
 
           <span>/</span>
 
           <li className="menu__item">
-            <NavLink exact to="/comics" className="menu__link" activeClassName="menu__link--active">Comics</NavLink>
+            <NavLink to="/comics"
+              end
+              className={({ isActive }) => ("menu__link" + (isActive ? " menu__link--active" : ''))}>Comics</NavLink>
           </li>
         </ul>
       </nav>
