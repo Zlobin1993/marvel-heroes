@@ -17,7 +17,7 @@ const AppHeader = () => {
             <NavLink
               to="/"
               end
-              className={({ isActive }) => ("menu__link" + (isActive ? " menu__link--active" : ''))}>Characters</NavLink>
+              className={({ isActive }) => ("menu__link" + (isActive && " menu__link--active"))}>Characters</NavLink>
           </li>
 
           <span>/</span>
@@ -25,7 +25,7 @@ const AppHeader = () => {
           <li className="menu__item">
             <NavLink to="/comics"
               end
-              className={({ isActive }) => ("menu__link" + (isActive ? " menu__link--active" : ''))}>Comics</NavLink>
+              className={({ isActive }) => ("menu__link" + (isActive && " menu__link--active"))}>Comics</NavLink>
           </li>
         </ul>
       </nav>
