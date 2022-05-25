@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import RandomChar from "../randomChar/RandomChar";
+import RandomCharacterWrapper from "../randomCharacterWrapper/RandomCharacterWrapper";
 import CharList from "../charList/CharList";
 import CharInfo from "../charInfo/CharInfo";
 import ErrorBoundary from '../errorBoundary/ErrorBoundary';
@@ -15,7 +15,7 @@ const MainPage = () => {
   return (
     <>
       <ErrorBoundary>
-        <RandomChar />
+        <RandomCharacterWrapper />
       </ErrorBoundary>
 
       <div className="character__content">

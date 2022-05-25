@@ -1,0 +1,52 @@
+@import "../../style/variables.scss";
+
+.random-character {
+    position: relative;
+    display: grid;
+    grid-template-columns: 40% 60%;
+    grid-template-rows: auto min-content;
+    gap: 20px;
+    padding: 30px;
+
+    @include respond-to(mobile-devices) {
+        padding: 20px;
+    }
+
+    &__image-wrapper {
+        aspect-ratio: 1/1;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__name {
+        font-weight: bold;
+        font-size: 22px;
+        line-height: 29px;
+        text-transform: uppercase;
+    }
+
+    &__description {
+        margin: 20px 0 0;
+        font-size: 14px;
+        line-height: 1.2;
+    }
+
+    &__button-list {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-end;
+    }
+
+    &__button {
+        margin: 0 20px 0 0;
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}

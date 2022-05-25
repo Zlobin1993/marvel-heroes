@@ -1,0 +1,21 @@
+@import "../../style/variables.scss";
+
+.app {
+    position: relative;
+    max-width: 1100px;
+    min-width: 320px;
+    margin: 0 auto;
+    padding: 50px 30px;
+
+    @include respond-to(mobile-devices) {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    &__background-decoration {
+        position: absolute;
+        right: -174px;
+        bottom: -70px;
+        z-index: -1;
+    }
+}

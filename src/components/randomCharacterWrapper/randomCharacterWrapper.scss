@@ -1,0 +1,64 @@
+@import "../../style/variables.scss";
+
+.random-character-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    min-height: 260px;
+    box-shadow: 5px 5px 20px rgba($black, 0.25);
+
+    @include respond-to(mobile-devices) {
+        grid-template-columns: 2fr 1fr;
+    }
+
+    @include respond-to(mobile) {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    &__static-side {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 30px;
+        background-color: $dark;
+        overflow: hidden;
+
+        @include respond-to(mobile-devices) {
+            padding: 20px;
+        }
+    }
+
+    &__title {
+        position: relative;
+        margin: 0;
+        font-size: 24px;
+        line-height: 1.3;
+        letter-spacing: -0.045em;
+        font-weight: bold;
+        color: $white;
+
+        @include respond-to(mobile-devices) {
+            font-size: 20px;
+        }
+
+        @include respond-to(mobile) {
+            font-size: 18px;
+        }
+
+        & + & {
+            margin-top: 20px;
+        }
+    }
+
+    &__button {
+        margin: 20px 0 0;
+    }
+
+    &__decoration {
+        position: absolute;
+        bottom: 14px;
+        right: -37px;
+    }
+}

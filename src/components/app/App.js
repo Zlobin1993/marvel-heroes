@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import AppHeader from "../appHeader/AppHeader";
 import Spinner from '../spinner/Spinner';
 
+import './app.scss';
+
 import decoration from '../../resources/img/vision.png';
 
 const MainPage = lazy(() => import('../pages/MainPage'));
