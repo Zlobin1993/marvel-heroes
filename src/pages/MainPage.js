@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import RandomCharacterWrapper from "../randomCharacterWrapper/RandomCharacterWrapper";
-import CharList from "../charList/CharList";
-import CharInfo from "../charInfo/CharInfo";
-import ErrorBoundary from '../errorBoundary/ErrorBoundary';
+import RandomCharacterWrapper from "../components/randomCharacterWrapper/RandomCharacterWrapper";
+import CharList from "../components/charList/CharList";
+import CharInfo from "../components/charInfo/CharInfo";
+import ErrorBoundary from '../components/errorBoundary/ErrorBoundary';
 
 const MainPage = () => {
   const [selectedCharacterId, setSelectedCharacterId] = useState(null);
@@ -18,7 +18,7 @@ const MainPage = () => {
         <RandomCharacterWrapper />
       </ErrorBoundary>
 
-      <div className="character__content">
+      <div className="character">
         <ErrorBoundary>
           <CharList onCharacterSelected={onCharacterSelected} />
         </ErrorBoundary>

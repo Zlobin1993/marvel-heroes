@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import ErrorMessage from "../../errorMessage/ErrorMessage";
+import ErrorMessage from "../../components/errorMessage/ErrorMessage";
 
 import './404.scss';
 

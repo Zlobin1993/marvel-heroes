@@ -8,10 +8,10 @@ import './app.scss';
 
 import decoration from '../../resources/img/vision.png';
 
-const MainPage = lazy(() => import('../pages/MainPage'));
-const ComicsPage = lazy(() => import('../pages/ComicsPage'));
-const SingleComicPage = lazy(() => import('../pages/SingleComicPage/SingleComicPage'));
-const Page404 = lazy(() => import('../pages/404/404'));
+const MainPage = lazy(() => import('../../pages/MainPage'));
+const ComicsPage = lazy(() => import('../../pages/ComicsPage'));
+const SingleComicPage = lazy(() => import('../../pages/SingleComicPage/SingleComicPage'));
+const Page404 = lazy(() => import('../../pages/404/404'));
 
 const App = () => {
   return (

@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
-import Spinner from '../../spinner/Spinner';
-import ErrorMessage from '../../errorMessage/ErrorMessage';
+import Spinner from '../../components/spinner/Spinner';
+import ErrorMessage from '../../components/errorMessage/ErrorMessage';
 
-import useMarvelService from '../../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 import './singleComicPage.scss';
 
