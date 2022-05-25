@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 
 import RandomCharacter from '../randomCharacter/RandomCharacter';
-import Spinner from '../spinner/Spinner';
-import ErrorMessage from '../errorMessage/ErrorMessage';
 
 import useMarvelService from '../../services/MarvelService';
 
@@ -32,17 +30,9 @@ const RandomCharacterWrapper = () => {
       .then(onCharacterLoaded)
   }
 
-  const errorMessage = error && <ErrorMessage message='Failed to load random character.' />;
-  const spinner = isLoading && <Spinner />;
-  const content = !(isLoading || error) && <RandomCharacter character={character} />;
-
   return (
     <div className="random-character-wrapper">
-      <div className="random-character">
-        {spinner}
-        {errorMessage}
-        {content}
-      </div>
+      <RandomCharacter character={character} error={error} isLoading={isLoading} />
 
       <div className="random-character-wrapper__static-side">
         <img src={mjolnir} alt="mjolnir" className="random-character-wrapper__decoration" />

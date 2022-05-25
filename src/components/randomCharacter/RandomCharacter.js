@@ -1,11 +1,13 @@
 import ImageWrapper from '../imageWrapper/ImageWrapper';
+import Spinner from '../spinner/Spinner';
+import ErrorMessage from '../errorMessage/ErrorMessage';
 
 import './randomCharacter.scss';
 
-const RandomCharacterView = ({ character }) => {
+const RandomCharacterView = ({ character, error, isLoading }) => {
   const { name, description, thumbnail, linkHomepage, linkWiki } = character;
 
-  return (
+  const content = (
     <>
       <ImageWrapper imageSource={thumbnail} imageAlt={name} className='random-character__image-wrapper' />
 
@@ -26,6 +28,14 @@ const RandomCharacterView = ({ character }) => {
           rel="noreferrer">Wiki</a>
       </div>
     </>
+  );
+
+  return (
+    <div className="random-character">
+      {isLoading && <Spinner />}
+      {error && <ErrorMessage message='Failed to load random character.' />}
+      {!(isLoading || error) && content}
+    </div>
   )
 }
 
