@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
+import ImageWrapper from '../imageWrapper/ImageWrapper';
+import CharacterComicList from '../characterComicList/CharacterComicList';
 
 import useMarvelService from '../../services/MarvelService';
 
@@ -31,35 +33,34 @@ const CharacterInfo = ({ characterId }) => {
       .then(onCharacterLoaded)
   }
 
-  const skeleton = !(character || isLoading || error) && (
+  const skeleton = (
     <>
       <p className="character-info__initial-message">Please select a character to see information.</p>
       <Skeleton />
     </>
-  ),
-    errorMessage = error && <ErrorMessage message='Failed to load character info.' />,
-    spinner = isLoading && <Spinner />,
-    content = (!(isLoading || error) && character) && <CharacterView character={character} />;
+  );
+
+  const content = <CharacterView character={character} />;
 
   return (
     <div className="character-info">
       <div className="character-info__block">
-        {skeleton}
-        {spinner}
-        {errorMessage}
-        {content}
+        {!(character || isLoading || error) && skeleton}
+        {isLoading && <Spinner />}
+        {error && <ErrorMessage message='Failed to load character info.' />}
+        {(!(isLoading || error) && character) && content}
       </div>
     </div>
   );
 }
 
 const CharacterView = ({ character }) => {
-  const { name, description, thumbnail, linkHomepage, linkWiki, comicsList } = character;
+  const { name, description, thumbnail, linkHomepage, linkWiki, comicList } = character;
 
   return (
     <>
       <div className="character-info__basics">
-        <CharacterThumbnail thumbnailSrc={thumbnail} thumbnailAlt={name} />
+        <ImageWrapper imageSource={thumbnail} imageAlt={name} className='character-info__image' />
 
         <div>
           <div className="character-info__name">{name}</div>
@@ -79,44 +80,9 @@ const CharacterView = ({ character }) => {
       </div>
 
       <div className="character-info__description">{description}</div>
-      <ComicsList comicsList={comicsList} />
+      <CharacterComicList comicList={comicList} />
     </>
   );
-}
-
-// TODO: Divide to another file.
-const CharacterThumbnail = ({ thumbnailSrc, thumbnailAlt }) => {
-  return thumbnailSrc
-    ? <img className='character-info__image'
-      src={thumbnailSrc}
-      alt={thumbnailAlt} />
-    : <div className='character-info__image character-info__image--no-image'>
-      <ErrorMessage message="Image not found." />
-    </div>;
-}
-
-// TODO: Divide to another file.
-const ComicsList = ({ comicsList }) => {
-  return comicsList.length > 0
-    ? (
-      <>
-        <h3 className="character-info__title">Comics:</h3>
-
-        <ul className="character-info__comic-list">
-          {comicsList.map((comic, index) => {
-            return (
-              <li className="character-info__comic"
-                key={index}>
-                {comic.name}
-              </li>
-            )
-          })}
-        </ul>
-      </>
-    )
-    : (
-      <h3 className="character-info__title">There is no comics with this character.</h3>
-    );
 }
 
 export default CharacterInfo;

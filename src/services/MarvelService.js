@@ -42,7 +42,7 @@ const useMarvelService = () => {
       thumbnail,
       linkHomepage: character.urls[0].url, // TODO: Use url by urlType field.
       linkWiki: character.urls[1].url, // TODO: Use url by urlType field.
-      comicsList: character.comics.items || [],
+      comicList: character.comics.items || [],
     };
   }
 

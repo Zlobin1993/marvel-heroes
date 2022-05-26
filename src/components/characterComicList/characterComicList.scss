@@ -1,0 +1,22 @@
+@import "../../style/variables.scss";
+
+.character-comic-list {
+    &__title {
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 24px;
+    }
+
+    &__list {
+        position: relative;
+        margin-top: 10px;
+    }
+
+    &__comic {
+        width: 100%;
+        padding: 0px 10px;
+        line-height: 25px;
+        box-shadow: 0px 4px 4px rgba($black, 0.25);
+        margin-top: 10px;
+    }
+}
