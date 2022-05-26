@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import RandomCharacterWrapper from "../components/randomCharacterWrapper/RandomCharacterWrapper";
 import CharList from "../components/charList/CharList";
-import CharInfo from "../components/charInfo/CharInfo";
+import CharacterInfo from "../components/characterInfo/CharacterInfo";
 import ErrorBoundary from '../components/errorBoundary/ErrorBoundary';
 
 const MainPage = () => {
@@ -24,7 +24,7 @@ const MainPage = () => {
         </ErrorBoundary>
 
         <ErrorBoundary>
-          <CharInfo characterId={selectedCharacterId} />
+          <CharacterInfo characterId={selectedCharacterId} />
         </ErrorBoundary>
       </div>
     </>

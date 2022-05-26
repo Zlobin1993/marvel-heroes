@@ -6,9 +6,9 @@ import Skeleton from '../skeleton/Skeleton';
 
 import useMarvelService from '../../services/MarvelService';
 
-import './charInfo.scss';
+import './characterInfo.scss';
 
-const CharInfo = ({ characterId }) => {
+const CharacterInfo = ({ characterId }) => {
   const { isLoading, error, clearError, getCharacter } = useMarvelService();
   const [character, setCharacter] = useState(null);
 
@@ -31,7 +31,12 @@ const CharInfo = ({ characterId }) => {
       .then(onCharacterLoaded)
   }
 
-  const skeleton = !(character || isLoading || error) && <Skeleton />,
+  const skeleton = !(character || isLoading || error) && (
+    <>
+      <p className="character-info__initial-message">Please select a character to see information.</p>
+      <Skeleton />
+    </>
+  ),
     errorMessage = error && <ErrorMessage message='Failed to load character info.' />,
     spinner = isLoading && <Spinner />,
     content = (!(isLoading || error) && character) && <CharacterView character={character} />;
@@ -92,28 +97,26 @@ const CharacterThumbnail = ({ thumbnailSrc, thumbnailAlt }) => {
 
 // TODO: Divide to another file.
 const ComicsList = ({ comicsList }) => {
-  if (comicsList.length > 0) {
-    return (
+  return comicsList.length > 0
+    ? (
       <>
         <h3 className="character-info__title">Comics:</h3>
 
         <ul className="character-info__comic-list">
-          {comicsList.map((comicsItem, index) => {
+          {comicsList.map((comic, index) => {
             return (
               <li className="character-info__comic"
                 key={index}>
-                {comicsItem.name}
+                {comic.name}
               </li>
             )
           })}
         </ul>
       </>
+    )
+    : (
+      <h3 className="character-info__title">There is no comics with this character.</h3>
     );
-  } else {
-    return (
-      <h3 className="character__comics">There is no comics with this character.</h3>
-    );
-  }
 }
 
-export default CharInfo;
+export default CharacterInfo;

@@ -10,10 +10,6 @@
         background-color: $white;
         box-shadow: 0px 0px 20px rgba($black, 0.25);
         overflow-y: auto;
-
-        .skeleton {
-            margin-top: 30px;
-        }
     }
 
     &__basics {
@@ -87,7 +83,8 @@
         margin-top: 10px;
     }
 
-    &__select {
+    &__initial-message {
+        margin: 0 0 20px;
         font-weight: bold;
         font-size: 18px;
         line-height: 24px;
