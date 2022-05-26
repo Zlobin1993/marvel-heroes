@@ -2,9 +2,9 @@
 
 .character {
     display: grid;
-    grid-template-columns: 650px 425px;
-    column-gap: 25px;
-    margin-top: 50px;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 30px;
+    margin: 30px 0 0;
 
     &__list {
         position: relative;
@@ -12,13 +12,11 @@
 
     &__grid {
         display: grid;
-        grid-template-columns: repeat(3, 200px);
-        column-gap: 25px;
-        row-gap: 30px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
     }
 
     &__item {
-        width: 200px;
         min-height: 300px;
         box-shadow: 5px 5px 10px rgba($black, 0.25);
         cursor: pointer;

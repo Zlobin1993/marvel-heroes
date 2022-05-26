@@ -22,7 +22,7 @@ const RandomCharacterView = ({ character, error, isLoading }) => {
           target="_blank"
           rel="noreferrer">Homepage</a>
 
-        <a className="button button__secondary"
+        <a className="button button--secondary"
           href={linkWiki}
           target="_blank"
           rel="noreferrer">Wiki</a>

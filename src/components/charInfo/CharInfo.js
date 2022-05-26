@@ -37,11 +37,13 @@ const CharInfo = ({ characterId }) => {
     content = (!(isLoading || error) && character) && <CharacterView character={character} />;
 
   return (
-    <div className="character__info">
-      {skeleton}
-      {spinner}
-      {errorMessage}
-      {content}
+    <div className="character-info">
+      <div className="character-info__block">
+        {skeleton}
+        {spinner}
+        {errorMessage}
+        {content}
+      </div>
     </div>
   );
 }
@@ -51,19 +53,19 @@ const CharacterView = ({ character }) => {
 
   return (
     <>
-      <div className="character__basics">
+      <div className="character-info__basics">
         <CharacterThumbnail thumbnailSrc={thumbnail} thumbnailAlt={name} />
 
         <div>
-          <div className="character__info-name">{name}</div>
+          <div className="character-info__name">{name}</div>
 
-          <div className="character__btns">
-            <a className="button"
+          <div className="character-info__button-list">
+            <a className="button character-info__button"
               href={linkHomepage}
               target="_blank"
               rel="noreferrer">Homepage</a>
 
-            <a className="button button__secondary"
+            <a className="button button--secondary character-info__button"
               href={linkWiki}
               target="_blank"
               rel="noreferrer">Wiki</a>
@@ -71,7 +73,7 @@ const CharacterView = ({ character }) => {
         </div>
       </div>
 
-      <div className="character__descr">{description}</div>
+      <div className="character-info__description">{description}</div>
       <ComicsList comicsList={comicsList} />
     </>
   );
@@ -80,10 +82,10 @@ const CharacterView = ({ character }) => {
 // TODO: Divide to another file.
 const CharacterThumbnail = ({ thumbnailSrc, thumbnailAlt }) => {
   return thumbnailSrc
-    ? <img className='character__image character__image--small'
+    ? <img className='character-info__image'
       src={thumbnailSrc}
       alt={thumbnailAlt} />
-    : <div className='character__image character__image--small character__image--no-image'>
+    : <div className='character-info__image character-info__image--no-image'>
       <ErrorMessage message="Image not found." />
     </div>;
 }
@@ -93,12 +95,12 @@ const ComicsList = ({ comicsList }) => {
   if (comicsList.length > 0) {
     return (
       <>
-        <h3 className="character__comics">Comics:</h3>
+        <h3 className="character-info__title">Comics:</h3>
 
-        <ul className="character__comics-list">
+        <ul className="character-info__comic-list">
           {comicsList.map((comicsItem, index) => {
             return (
-              <li className="character__comics-item"
+              <li className="character-info__comic"
                 key={index}>
                 {comicsItem.name}
               </li>

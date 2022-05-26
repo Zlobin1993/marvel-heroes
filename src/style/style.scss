@@ -1,9 +1,24 @@
-@import 'normalize.css';
+@import "normalize.css";
 
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap");
 
 @import "./variables";
 @import "./button";
+
+html {
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: $grey-light;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: $main;
+    }
+}
 
 body {
     overflow-x: hidden;

@@ -58,7 +58,7 @@ const ComicsList = () => {
 
       {
         !isComicsListEnded && (
-          <button className="button button__long"
+          <button className="button button--long"
             disabled={isAdditionalComicsLoading}
             onClick={() => onRequest(additionalComicsOffset, false)}
           >

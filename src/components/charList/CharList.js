@@ -68,7 +68,7 @@ const CharList = ({ onCharacterSelected }) => {
 
       {
         !isCharacterListEnded && (
-          <button className="button button__long"
+          <button className="button button--long"
             disabled={isAdditionalCharactersLoading}
             onClick={() => onRequest(additionalCharacterOffset, false)}
           >
