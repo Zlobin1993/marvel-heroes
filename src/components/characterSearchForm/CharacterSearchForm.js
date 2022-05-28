@@ -1,4 +1,6 @@
 // import { useState, useEffect } from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { object, string } from 'yup';
 
 // import Spinner from '../spinner/Spinner';
 // import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -32,22 +34,44 @@ const CharacterSearchForm = () => {
 
   return (
     <div className="character-search-form character-info__search-form">
-      <form className='character-search-form__form'>
-        <label className='character-search-form__label'>Find character direct page by name:</label>
+      <Formik
+        initialValues={{
+          name: '',
+        }}
 
-        <div className='character-search-form__wrapper'>
-          <input className='character-search-form__input' type="text" required placeholder='Enter name' />
-          <button type='submit' className='button character-search-form__button'>Find</button>
-        </div>
-      </form>
+        validationSchema={object({
+          name: string().required('This field is required'),
+        })}
 
-      {/* <div className="character-info__block">
-        {!(character || isLoading || error) && skeleton}
-        {isLoading && <Spinner />}
-        {error && <ErrorMessage message='Failed to load character info.' />}
-        {(!(isLoading || error) && character) && content}
-      </div> */}
+        onSubmit={(values, { setSubmitting }) => {
+          setTimeout(() => {
+            alert(JSON.stringify(values, null, 2));
+            setSubmitting(false);
+          }, 400);
+        }}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <label className="character-search-form__label" htmlFor="name">Find character direct page by name:</label>
+
+            <div className="character-search-form__wrapper">
+              <Field type="text" name="name" id="name" className="character-search-form__input" />
+              <button type="submit" className="button character-search-form__button" disabled={isSubmitting}>Find</button>
+            </div>
+
+            <ErrorMessage name="name" className="character-search-form__message" component="div" />
+          </Form>
+        )}
+      </Formik>
     </div>
+
+    //   {/* <div className="character-info__block">
+    //     {!(character || isLoading || error) && skeleton}
+    //     {isLoading && <Spinner />}
+    //     {error && <ErrorMessage message='Failed to load character info.' />}
+    //     {(!(isLoading || error) && character) && content}
+    //   </div> */}
+    // </div>
   );
 }
 
