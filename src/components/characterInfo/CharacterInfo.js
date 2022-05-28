@@ -43,7 +43,7 @@ const CharacterInfo = ({ characterId }) => {
   const content = <CharacterView character={character} />;
 
   return (
-    <div className="character-info">
+    <div className="character-info character__info">
       <div className="character-info__block">
         {!(character || isLoading || error) && skeleton}
         {isLoading && <Spinner />}

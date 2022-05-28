@@ -10,6 +10,16 @@
         position: relative;
     }
 
+    &__content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__info {
+        flex-grow: 1;
+        margin: 30px 0 0;
+    }
+
     &__grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
