@@ -9,30 +9,30 @@ import useMarvelService from '../../services/MarvelService';
 import './singleCharacterPage.scss';
 
 const SingleCharacterPage = () => {
-  const [comic, setComic] = useState(null);
-  const { characterId } = useParams();
-  const { isLoading, error, clearError, getComic } = useMarvelService();
+  const [character, setCharacter] = useState(null);
+  const { characterName } = useParams();
+  const { isLoading, error, clearError, getCharacterByName } = useMarvelService();
 
   useEffect(() => {
-    updateComic();
+    updateCharacter();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [characterId])
+  }, [characterName])
 
-  const onComicLoaded = comic => {
-    setComic(comic);
+  const onCharacterLoaded = character => {
+    setCharacter(character);
   }
 
-  const updateComic = () => {
+  const updateCharacter = () => {
     clearError();
 
-    getComic(characterId)
-      .then(onComicLoaded)
+    getCharacterByName(characterName)
+      .then(onCharacterLoaded)
   }
 
   const errorMessage = error && <ErrorMessage message='Failed to load character info.' />,
     spinner = isLoading && <Spinner />,
-    content = (!(isLoading || error) && comic) && <ComicView comic={comic} />;
+    content = (!(isLoading || error) && character) && <CharacterView character={character} />;
 
   return (
     <>
@@ -43,19 +43,16 @@ const SingleCharacterPage = () => {
   );
 }
 
-const ComicView = ({ comic }) => {
-  const { title, description, thumbnail, price } = comic;
+const CharacterView = ({ character }) => {
+  const { name, description, thumbnail } = character;
 
   return (
     <div className="single-comic">
-      <img src={thumbnail} alt={title} className="single-comic__img" />
+      <img src={thumbnail} alt={name} className="single-comic__img" />
 
       <div className="single-comic__info">
-        <h2 className="single-comic__name">{title}</h2>
+        <h2 className="single-comic__name">{name}</h2>
         <p className="single-comic__descr">{description}</p>
-        {/* <p className="single-comic__descr">144 pages</p>
-        <p className="single-comic__descr">Language: en-us</p> */}
-        <div className="single-comic__price">{price}</div>
       </div>
 
       <Link to="/" className="single-comic__back">Back to homepge</Link>
