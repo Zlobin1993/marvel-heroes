@@ -17,22 +17,26 @@ const App = () => {
   return (
     <Router>
       <div className="app">
-        <AppHeader />
+        <div className="app__column">
+          <AppHeader />
 
-        <main>
-          <Suspense fallback={<Spinner />}>
-            <Routes>
-              <Route path={'/'} element={<MainPage />} />
-              <Route path={'/comics'} element={<ComicsPage />} />
-              <Route path={'/comics/:comicId'} element={<SingleComicPage />} />
-              <Route path={'*'} element={<Page404 />} />
-            </Routes>
-          </Suspense>
+          <main>
+            <Suspense fallback={<Spinner />}>
+              <Routes>
+                <Route path={'/'} element={<MainPage />} />
+                <Route path={'/comics'} element={<ComicsPage />} />
+                <Route path={'/comics/:comicId'} element={<SingleComicPage />} />
+                <Route path={'*'} element={<Page404 />} />
+              </Routes>
+            </Suspense>
+          </main>
+        </div>
 
-          <img className="app__background-decoration"
-            src={decoration}
-            alt="Vision" />
-        </main>
+        <img className="app__background-decoration"
+          src={decoration}
+          height={372}
+          width={467}
+          alt="Vision" />
       </div>
     </Router>
   );
