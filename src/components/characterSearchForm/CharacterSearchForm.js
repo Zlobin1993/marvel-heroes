@@ -3,7 +3,6 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { object, string } from 'yup';
 
 // import Spinner from '../spinner/Spinner';
-// import ErrorMessage from '../errorMessage/ErrorMessage';
 
 // import useMarvelService from '../../services/MarvelService';
 
@@ -59,19 +58,15 @@ const CharacterSearchForm = () => {
               <button type="submit" className="button character-search-form__button" disabled={isSubmitting}>Find</button>
             </div>
 
-            <ErrorMessage name="name" className="character-search-form__message" component="div" />
+            <ErrorMessage name="name" className="character-search-form__message" component="p" />
           </Form>
         )}
       </Formik>
-    </div>
 
-    //   {/* <div className="character-info__block">
-    //     {!(character || isLoading || error) && skeleton}
-    //     {isLoading && <Spinner />}
-    //     {error && <ErrorMessage message='Failed to load character info.' />}
-    //     {(!(isLoading || error) && character) && content}
-    //   </div> */}
-    // </div>
+      {/* {isLoading && <Spinner />}
+      {error && <p className="character-search-form__message">The character was not found. Check the name and try again</p>}
+      {(!(isLoading || error) && character) && content} */}
+    </div>
   );
 }
 
