@@ -30,6 +30,8 @@ const useMarvelService = () => {
   }
 
   const _transformCharacterData = character => {
+    if (!character) return {};
+
     let thumbnail = null;
 
     if (character.thumbnail.path && character.thumbnail.extension) {

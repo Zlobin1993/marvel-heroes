@@ -1,35 +1,47 @@
-// import { useState, useEffect } from 'react';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Formik, Form, Field, ErrorMessage as FormikErrorMessage } from 'formik';
 import { object, string } from 'yup';
 
-// import Spinner from '../spinner/Spinner';
+import Spinner from '../spinner/Spinner';
 
-// import useMarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 
 import './characterSearchForm.scss';
 
 const CharacterSearchForm = () => {
-  // const { isLoading, error, clearError, getCharacter } = useMarvelService();
-  // const [character, setCharacter] = useState(null);
+  const [character, setCharacter] = useState(null);
+  const { isLoading, error, clearError, getCharacterByName } = useMarvelService();
 
-  // useEffect(() => {
-  //   updateCharacter();
+  const onCharacterLoaded = character => {
+    setCharacter(character);
+  }
 
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [characterId])
+  const updateCharacter = name => {
+    clearError();
 
-  // const onCharacterLoaded = character => {
-  //   setCharacter(character);
-  // }
+    getCharacterByName(name)
+      .then(onCharacterLoaded);
+  }
 
-  // const updateCharacter = () => {
-  //   if (!characterId) return;
+  const results = character && character.name
+    ? (
+      <>
+        <p className="character-search-form__message character-search-form__message--success">Character found. Visit {character.name} page?</p>
 
-  //   clearError();
-
-  //   getCharacter(characterId)
-  //     .then(onCharacterLoaded)
-  // }
+        <p className="character-search-form__message">
+          <Link
+            className="button"
+            to={`/${character.name}`}
+          >
+            To page
+          </Link>
+        </p>
+      </>
+    )
+    : character !== null
+      ? <p className="character-search-form__message character-search-form__message--error">The character was not found. Check the name and try again.</p>
+      : null;
 
   return (
     <div className="character-search-form character-info__search-form">
@@ -39,33 +51,50 @@ const CharacterSearchForm = () => {
         }}
 
         validationSchema={object({
-          name: string().required('This field is required'),
+          name: string().required('This field is required!'),
         })}
 
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            setSubmitting(false);
-          }, 400);
+        onSubmit={({ name }) => {
+          updateCharacter(name);
         }}
       >
-        {({ isSubmitting }) => (
+        {() => (
           <Form>
-            <label className="character-search-form__label" htmlFor="name">Find character direct page by name:</label>
+            <label
+              className="character-search-form__label"
+              htmlFor="name"
+            >
+              Find character direct page by name:
+            </label>
 
             <div className="character-search-form__wrapper">
-              <Field type="text" name="name" id="name" className="character-search-form__input" />
-              <button type="submit" className="button character-search-form__button" disabled={isSubmitting}>Find</button>
+              <Field
+                type="text"
+                name="name"
+                id="name"
+                className="character-search-form__input"
+              />
+
+              <button
+                type="submit"
+                className="button character-search-form__button"
+                disabled={isLoading}
+              >
+                {isLoading ? <Spinner type='white' size='small' /> : 'Find'}
+              </button>
             </div>
 
-            <ErrorMessage name="name" className="character-search-form__message" component="p" />
+            <FormikErrorMessage
+              className="character-search-form__message character-search-form__message--error"
+              name="name"
+              component="p"
+            />
           </Form>
         )}
       </Formik>
 
-      {/* {isLoading && <Spinner />}
-      {error && <p className="character-search-form__message">The character was not found. Check the name and try again</p>}
-      {(!(isLoading || error) && character) && content} */}
+      {results}
+      {error && <p className="character-search-form__message character-search-form__message--error">Can't check your character for now. Try again later.</p>}
     </div>
   );
 }
