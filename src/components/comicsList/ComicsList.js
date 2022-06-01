@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Spinner from '../spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
+import ImageWrapper from '../imageWrapper/ImageWrapper';
 
 import useMarvelService from '../../services/MarvelService';
 
@@ -43,10 +44,21 @@ const ComicsList = () => {
         {
           comicsList.map(({ id, title, thumbnail, price }) => {
             return (
-              <li className="comics__item"
-                key={id}>
-                <Link to={`/comics/${id}`}>
-                  <CharacterThumbnail thumbnailSrc={thumbnail} thumbnailAlt={title} />
+              <li
+                className="comics__item"
+                key={id}
+              >
+                <Link
+                  className='comics__link'
+                  to={`/comics/${id}`}
+                >
+
+                  <ImageWrapper
+                    className='comics__image-wrapper'
+                    imageSource={thumbnail}
+                    imageAlt={title}
+                  />
+
                   <div className="comics__title">{title}</div>
                   <div className="comics__price">{price && `${price}$`}</div>
                 </Link>
@@ -79,17 +91,6 @@ const ComicsList = () => {
       {renderedComicsList}
     </div>
   )
-}
-
-// TODO: Divide to another file.
-const CharacterThumbnail = ({ thumbnailSrc, thumbnailAlt }) => {
-  return thumbnailSrc
-    ? <img className='comics__image'
-      src={thumbnailSrc}
-      alt={thumbnailAlt} />
-    : <div className='comics__image comics__image--no-image'>
-      <ErrorMessage message="Image not found." />
-    </div>;
 }
 
 export default ComicsList;
